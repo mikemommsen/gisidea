@@ -10,6 +10,12 @@ class Span:
             return True
         else:
             return False
+            
+    def pointOutside(self, invalue):
+        if self.low > invalue or self.high < invalue:
+            return True
+        else:
+            return False
 
     def pointOnBoundary(self, invalue):
         if self.low == invalue or invalue == self.high:
