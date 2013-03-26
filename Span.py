@@ -1,4 +1,3 @@
-
 class Span:
     """basic exercise of a 1d span to work through basic concepts"""
     def __init__(self, low, high):
@@ -12,7 +11,7 @@ class Span:
         else:
             return False
 
-    def PointOnBoundary(self, invalue):
+    def pointOnBoundary(self, invalue):
         if self.low == invalue or invalue == self.high:
             return True
         else:
