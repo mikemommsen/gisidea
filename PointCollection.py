@@ -1,0 +1,3 @@
+import Point
+
+class PointCollection:
