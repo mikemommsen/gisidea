@@ -50,11 +50,17 @@ class Span:
             return False
     
     def touchesOutside(self, other):
-        if pointInside(self, other.low) and pointInside(self, other.high):
+        if self.pointOnBoundary(other.low) and self.pointIntside(other.high):
             return True
-        else:
+        elif self.pointOnBoundary(other.high) and self.pointIntside(other.low):
+            return True
+        else: 
             return False
             
     def touchesInside(self, other):
-        if inside(self, other.low) or inside(self, other.high):
+        if self.pointOnBoundary(other.low) and self.pointOutside(other.high):
+            return True
+        elif self.pointOnBoundary(other.high) and self.pointOutside(other.low):
+            return True
+        else: 
             return False
