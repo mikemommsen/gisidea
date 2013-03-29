@@ -69,3 +69,19 @@ class Point:
             return math.atan2(self.y, self.x)
         else:
             return math.atan2(self.y - other.y, self.x - other.x)
+    
+    def eastwest(self, other):
+        if self.x == other.x:
+            return None
+        elif self.x > other.x:
+            return 'West'
+        else:
+            return 'East'
+    
+    def northsouth(self, other):
+        if self.y == other.y:
+            return None
+        elif self.y > other.y:
+            return 'South'
+        else:
+            return 'North'
