@@ -63,5 +63,15 @@ class Point:
 
     def __invert__(self):
         return Point(~(self.x), ~(self.y))
+    
+    def atan2(self, other=None):
+        if not other:
+            return math.atan2(self.y, self.x)
+        else:
+            return math.atan2(self.y - other.y, self.x - other.x)
+            
+    
+        
+        
 
 
