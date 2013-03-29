@@ -69,9 +69,3 @@ class Point:
             return math.atan2(self.y, self.x)
         else:
             return math.atan2(self.y - other.y, self.x - other.x)
-            
-    
-        
-        
-
-
