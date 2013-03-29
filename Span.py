@@ -64,3 +64,11 @@ class Span:
             return True
         else: 
             return False
+    # these set operations might fit into the iterable span idea, because they need to return multiples
+    def union(self, other):
+        
+    def intersect(self, other):
+    
+    def symmetric_difference(self, other):
+        
+    def difference(self, other):
