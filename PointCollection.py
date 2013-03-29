@@ -27,11 +27,32 @@ class PointCollection:
         for point in self.points:
             total += inpoint.distance(point)
         return total
+    
+    def centralpoint(self):
+        """returns the point that has the lowest total distance"""
+        mylist = []
+        for p in self.points:
+            # dont need to remove point because distance to itself is zero
+            mylist.append((p,self.totaldistance(p)))
+        return sorted(mylist, key = lambda x: x[1])[0][0]
         
     def closest(self, inpoint):
         """returns the closest point to the inpoint from the collection"""
         return sorted(self.points, key = lambda x: x.distance(inpoint))[0]
-  
+        
+    def median(self):
+        """returns a new point which is the median point for the point collection"""
+        # we could think about using an inverse distance function here
+        numberpoints = len(self.points)
+        middle = numberpoints / 2
+        if  numberpoints % 2 == 0:
+            medianx = sum(sorted(self.xs)[middle - 1:middle]) / 2
+            mediany = sum(sorted(self.ys)[middle - 1:middle]) / 2
+        else:
+            medianx = sorted(self.xs)[middle]
+            mediany = sorted(self.ys)[middle]
+        return Point(medianx, mediany)
+    
 class Bbox:
     def __init__(self, minimum, maximum):
         self.minimum = minimum
