@@ -65,6 +65,23 @@ class Span:
         else: 
             return False
     # these set operations might fit into the iterable span idea, because they need to return multiples
+class ListOfSpans:
+    def __init__(self, inlist = None):
+        self.spans = inlist
+    
+    @classmethod
+    def spansFromList(inlist, lowerbound=None, upperbound=None):
+        """takes a list of values and creates spans which are the closest to each point"""
+        inlist = sorted(inlist)
+        mylist = [lowerbound]
+        spanlist = []
+        for i in range(len(inlist) - 1):
+            mylist += [sum(inlist[i:i+1])/2]
+        mylist += [upperbound]
+        for i in range(len(mylist) - 1):
+            spanlist.append(Span(mylist[i],mylist[i+1]))
+        return spanlist
+    
     def union(self, other):
         
     def intersect(self, other):
