@@ -4,6 +4,7 @@ class Span:
         self.low = low
         self.high = high
         self.length = high - low
+        self.data = self.low, self.high
 
     def pointInside(self, invalue):
         """"""
@@ -76,12 +77,9 @@ class Span:
     
     def union(self, other):
         """"""
-        if not self.disjoint(other):
-            low = min(self.low, other.low)
-            high = max(self.high, other.high)
-            return Span(low, high)
-        else:
-            return None
+        low = min(self.low, other.low)
+        high = max(self.high, other.high)
+        return Span(low, high)
         
     def intersect(self, other):
         """find the area where they are the same"""
@@ -99,4 +97,8 @@ class Span:
         
     def difference(self, other):
         """"""
-        return
+        if self.disjoint(other):
+            return self
+        else:
+            sortedlist = {}
+        
