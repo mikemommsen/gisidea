@@ -89,16 +89,23 @@ class Span:
             return Span(low, high)
         else:
             return None
-    
-    
-    def symmetric_difference(self, other):
-        """return both differences - might be faster to chain the logic than call difference twice"""
-        return self.difference(other), other.difference(self)
         
     def difference(self, other):
         """"""
         if self.disjoint(other):
             return self
         else:
-            sortedlist = {}
+            if self.low < other.low:
+                firstspan = Span(self.low, other.low)
+            else:
+                firstspan = None
+            if self.high > other.high:
+                secondspan = Span(other.high, self.high)
+            else:
+                secondspan = None
+            return [x for x in (firstspan, secondspan) if x]
+            
+    def symmetric_difference(self, other):
+        """return both differences - might be faster to chain the logic than call difference twice"""
+        return self.difference(other), other.difference(self)
         
