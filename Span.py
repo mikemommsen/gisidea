@@ -5,6 +5,9 @@ class Span:
         self.high = high
         self.length = high - low
         self.data = self.low, self.high
+    
+    def __str__(self):
+        return 'Span object: low: {0}, high: {1}, length: {2}'.format(self.low, self.high, self.length)
 
     def pointInside(self, invalue):
         """"""
