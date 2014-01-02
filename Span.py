@@ -131,22 +131,15 @@ class SpanList(Span):
         """"""
         return 'SpanList object with spans: [{0}]'.format(','.join(s for s in spans))
         
-    def  simplify(self):
-        """planarize to create non overlapping simple list of spans"""
-        self.simple_spans = SpanList()
-        iterator = self.spans.__iter__()
-        s1 = iterator.next()
-        while s1:
-            
-            s1 = iterator.next()
-        for s1 in self.spans:
-            connected = [s2 for s2 in self.spans if not s1.disjoint(s2)]
-            if connected:
-                connected = s1.bounder(connected)
-                self.simple_spans.append(connected)
-            else:
+    def sort_low(self):
+        """"""
+        return sorted(self.spans,key=attrgetter('low'))
+    
+    def sort_high(self):
+        """"""
+        return sorted(self.spans, key=attrgetter('high'))
                 
-        
+    
         
         
         
