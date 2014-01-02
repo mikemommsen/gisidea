@@ -121,8 +121,49 @@ class Span(object):
 class SpanList(Span):
     """"""
     def __init__(self, spans=None):
+        """"""
         self.spans = spans
         low = min(getattr(s, 'low') for s in spans)
         high = max(getattr(s, 'high') for s in spans)
         super(Span, self).__init__(low, high)
+    
+    def __str__(self):
+        """"""
+        return 'SpanList object with spans: [{0}]'.format(','.join(s for s in spans))
+        
+    def  simplify(self):
+        """planarize to create non overlapping simple list of spans"""
+        self.simple_spans = SpanList()
+        iterator = self.spans.__iter__()
+        s1 = iterator.next()
+        while s1:
+            
+            s1 = iterator.next()
+        for s1 in self.spans:
+            connected = [s2 for s2 in self.spans if not s1.disjoint(s2)]
+            if connected:
+                connected = s1.bounder(connected)
+                self.simple_spans.append(connected)
+            else:
+                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
         
