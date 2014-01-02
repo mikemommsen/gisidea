@@ -1,4 +1,4 @@
-class Span:
+class Span(object):
     """basic exercise of a 1d span to work through basic concepts"""
     def __init__(self, low, high):
         self.low = low
@@ -62,27 +62,33 @@ class Span:
     
     def touchesOutside(self, other):
         """"""
-        if self.pointOnBoundary(other.low) and self.pointIntside(other.high):
-            return True
-        elif self.pointOnBoundary(other.high) and self.pointIntside(other.low):
-            return True
-        else: 
-            return False
-            
-    def touchesInside(self, other):
-        """"""
         if self.pointOnBoundary(other.low) and self.pointOutside(other.high):
             return True
         elif self.pointOnBoundary(other.high) and self.pointOutside(other.low):
             return True
         else: 
             return False
+            
+    def touchesInside(self, other):
+        """"""
+        if self.pointOnBoundary(other.low) and self.pointInside(other.high):
+            return True
+        elif self.pointOnBoundary(other.high) and self.pointInside(other.low):
+            return True
+        else: 
+            return False
     
-    def union(self, other):
+    def bounder(self, other):
         """"""
         low = min(self.low, other.low)
         high = max(self.high, other.high)
         return Span(low, high)
+        
+    def union(self, other):
+        if self.disjoint(other):
+            return self, other
+        else:
+            return bounder(self, other)
         
     def intersect(self, other):
         """find the area where they are the same"""
@@ -111,4 +117,12 @@ class Span:
     def symmetric_difference(self, other):
         """return both differences - might be faster to chain the logic than call difference twice"""
         return self.difference(other), other.difference(self)
+        
+class SpanList(Span):
+    """"""
+    def __init__(self, spans=None):
+        self.spans = spans
+        low = min(getattr(s, 'low') for s in spans)
+        high = max(getattr(s, 'high') for s in spans)
+        super(Span, self).__init__(low, high)
         
