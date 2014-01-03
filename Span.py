@@ -1,3 +1,7 @@
+# mikemommsen.com
+from operator import attrgetter
+
+
 class Span(object):
     """basic exercise of a 1d span to work through basic concepts"""
     def __init__(self, low, high):
@@ -142,48 +146,12 @@ class SpanList(Span):
         """"""
         return 'SpanList object with spans: [{0}]'.format(','.join(str(s) for s in self.spans))
         
-    def sort_low(self):
-        """"""
-        return sorted(self.spans,key=attrgetter('low'))
-    
-    def sort_high(self):
-        """"""
-        return sorted(self.spans, key=attrgetter('high'))
-        
-    def group_touching(self):
-        """"""
-        # create blank outlist - maybe should be spanlist
-        self.planar_spans = []
-        # grab the first one to allow for iteration
-        spans = self.sort_low()
-        s0 = spans[0]
-        # loop through each span
-        for s in spans[1:]:
-            # if the new one is not touching the old one
-            if s0.disjoint(s):
-                # throw it to the output list
-                self.outlist.append(s0)
-                # and make the new one the old one
-                s0 = s
-            # otherwise if they do touch
-            else:
-                # merge the new one into the old one
-                s0 = s.bounder(s0)
-    
-    def find_gaps(self):
-        """"""
-        # create the blank list
-        self.gap_list = []
-        # grab first high
-        prevhigh = self.planar_spans[0].high
-        # loop through the planar spans 
-        for s in self.planar_spans[1:]:
-            # grab low and highs
-            curlow, curhigh =  s.low, s.high
-            # add the gap spans to the gap_list
-            self.gap_list.append(Span(prevhigh, curlow))
-            # grab the high for the next time through the loop
-            prevhigh = curhigh
+    def append(self, inSpan):
+        self.spans.append(inSpan)
+        if inSpan.low < self.low:
+            self.low = inSpan.low
+        if inSpan.high > self.high:
+            self.high = inSpan.high
     
     def loop_group(self):
         spans = self.sort_low()
@@ -199,13 +167,14 @@ class SpanList(Span):
         else:
             yield outlist
     
-    def frequencies(self):
-        """"""
-        self.frequency_list = []
-        spans = self.sort_low()
-        prevlow, prevhigh = spans[0]
-        for s in spans[1:]:
-            low, high = s.low, s.high
+    def planarize(self):
+        self.planar_list = []
+        prev = None
+        for s in self.loop_group():
+            low = min(x.low for x in s)
+            high = max(x.high for x in s)
+            self.planar_list.append(Span(low, high))
+            
             
         
 class Tree(object):
