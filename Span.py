@@ -136,11 +136,11 @@ class SpanList(Span):
         if spans:
             low = min(getattr(s, 'low') for s in spans)
             high = max(getattr(s, 'high') for s in spans)
-            super(Span, self).__init__(low, high)
+            super(SpanList, self).__init__(low, high)
         
     def __str__(self):
         """"""
-        return 'SpanList object with spans: [{0}]'.format(','.join(s for s in spans))
+        return 'SpanList object with spans: [{0}]'.format(','.join(s for s in self.spans))
         
     def sort_low(self):
         """"""
