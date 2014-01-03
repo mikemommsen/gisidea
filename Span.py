@@ -123,10 +123,11 @@ class SpanList(Span):
     def __init__(self, spans=None):
         """"""
         self.spans = spans
-        low = min(getattr(s, 'low') for s in spans)
-        high = max(getattr(s, 'high') for s in spans)
-        super(Span, self).__init__(low, high)
-    
+        if spans:
+            low = min(getattr(s, 'low') for s in spans)
+            high = max(getattr(s, 'high') for s in spans)
+            super(Span, self).__init__(low, high)
+        
     def __str__(self):
         """"""
         return 'SpanList object with spans: [{0}]'.format(','.join(s for s in spans))
@@ -138,11 +139,45 @@ class SpanList(Span):
     def sort_high(self):
         """"""
         return sorted(self.spans, key=attrgetter('high'))
-                
+        
+    def group_touching(self):
+        """"""
+        # create blank outlist - maybe should be spanlist
+        self.planar_spans = []
+        # grab the first one to allow for iteration
+        spans = self.sort_high()
+        s0 = spans[0]
+        # loop through each span
+        for s in spans[1:]:
+            # if the new one is not touching the old one
+            if s0.disjoint(s):
+                # throw it to the output list
+                self.outlist.append(s0)
+                # and make the new one the old one
+                s0 = s
+            # otherwise if they do touch
+            else:
+                # merge the new one into the old one
+                s0 = s.bounder(s0)
     
+    def find_gaps(self):
+        """"""
+        # create the blank list
+        self.gap_list = []
+        # grab first high
+        prevhigh = self.planar_spans[0].high
+        # loop through the planar spans 
+        for s in self.planar_spans[1:]:
+            # grab low and highs
+            curlow, curhigh =  s.low, s.high
+            # add the gap spans to the gap_list
+            self.gap_list.append(Span(prevhigh, curlow))
+            # grab the high for the next time through the loop
+            prevhigh = curhigh
         
-        
-        
+class Tree(object):
+    """"""
+    def __init__(self, root=None, levels=None
         
         
         
