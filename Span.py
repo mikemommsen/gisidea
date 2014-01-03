@@ -179,7 +179,7 @@ class SpanList(Span):
     
     def find_gaps(self):
         self.gaps = []
-        spans = self.group_loop()
+        spans = self.loop_group()
         prevhigh = spans.next()
         for s in spans:
             low, high = s.low, s.high
@@ -195,16 +195,4 @@ class Tree(object):
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
         
