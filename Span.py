@@ -5,6 +5,8 @@ from operator import attrgetter
 class Span(object):
     """basic exercise of a 1d span to work through basic concepts"""
     def __init__(self, low, high):
+        if high < low:
+            low, high = high, low
         self.low = low
         self.high = high
         self.length = high - low
@@ -160,7 +162,7 @@ class SpanList(Span):
         prev = spans[0]
         outlist = SpanList([prev])
         for s in spans[1:]:
-            if prev.disjoint(s):
+            if outlist.disjoint(s):
                 yield outlist
                 outlist = SpanList([s])
             else:
@@ -173,9 +175,7 @@ class SpanList(Span):
         self.planar_list = []
         prev = None
         for s in self.loop_group():
-            low = min(x.low for x in s)
-            high = max(x.high for x in s)
-            self.planar_list.append(Span(low, high))
+            self.planar_list.append(Span(s.low, s.high))
     
     def find_gaps(self):
         self.gaps = []
