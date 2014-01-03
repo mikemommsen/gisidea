@@ -154,13 +154,15 @@ class SpanList(Span):
             self.high = inSpan.high
     
     def loop_group(self):
-        spans = self.sort_low()
+        """function to loop through the groups that overlap each other.
+        this is nice for some other functions"""
+        spans = sorted(self.spans, key=attrgetter('low'))
         prev = spans[0]
-        outlist = [prev]
+        outlist = SpanList([prev])
         for s in spans[1:]:
             if prev.disjoint(s):
                 yield outlist
-                outlist = [s]
+                outlist = SpanList([s])
             else:
                 outlist.append(s)
             prev = s
@@ -174,7 +176,16 @@ class SpanList(Span):
             low = min(x.low for x in s)
             high = max(x.high for x in s)
             self.planar_list.append(Span(low, high))
-            
+    
+    def find_gaps(self):
+        self.gaps = []
+        spans = self.group_loop()
+        prevhigh = spans.next()
+        for s in spans:
+            low, high = s.low, s.high
+            outspan = Span(prevhigh, low)
+            self.gaps.append(outspan)
+            prevhigh = high
             
         
 class Tree(object):
