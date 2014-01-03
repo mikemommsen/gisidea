@@ -140,7 +140,7 @@ class SpanList(Span):
         
     def __str__(self):
         """"""
-        return 'SpanList object with spans: [{0}]'.format(','.join(s for s in self.spans))
+        return 'SpanList object with spans: [{0}]'.format(','.join(str(s) for s in self.spans))
         
     def sort_low(self):
         """"""
