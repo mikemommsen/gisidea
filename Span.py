@@ -35,6 +35,12 @@ class Span(object):
             return True
         else:
             return False
+            
+    def split(self, invalue):
+        if self.pointinside(invalue):
+            return Spanlist([Span(self.low, invalue), Span(invalue, self.high)])
+        else:
+            return self
     
     def disjoint(self, other):
         """"""
@@ -45,9 +51,7 @@ class Span(object):
             
     def overlapping(self, other):
         """"""
-        if self.pointInside(other.low) and self.pointOutside(other.high):
-            return True
-        elif self.pointOutside(other.low) and self.pointInside(other.high):
+        if bool(self.pointInside(other.low)) + bool(self.pointInside(other.high)) == 1:
             return True
         else:
             return False
@@ -91,6 +95,7 @@ class Span(object):
         return Span(low, high)
         
     def union(self, other):
+        """"""
         if self.disjoint(other):
             return self, other
         else:
