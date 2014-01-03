@@ -147,7 +147,10 @@ class SpanList(Span):
         if spans:
             low = min(getattr(s, 'low') for s in spans)
             high = max(getattr(s, 'high') for s in spans)
-            super(SpanList, self).__init__(low, high)
+        else:
+            low = None
+            high = None
+        super(SpanList, self).__init__(low, high)
         
     def __str__(self):
         """"""
@@ -177,10 +180,13 @@ class SpanList(Span):
             yield outlist
     
     def planarize(self):
-        self.planar_list = []
+        self.planar_list = SpanList()
         prev = None
         for s in self.loop_group():
             self.planar_list.append(Span(s.low, s.high))
+    
+    def frequency_planarize(self):
+        self.frequency_planar_list = []
     
     def find_gaps(self):
         self.gaps = []
