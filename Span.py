@@ -118,6 +118,16 @@ class Span(object):
         """return both differences - might be faster to chain the logic than call difference twice"""
         return self.difference(other), other.difference(self)
         
+    def create_frequency(self, other):
+        """"""
+        if self.disjoint(other):
+            return {self: 1, other: 1}
+        else:
+            intersect = self.intersect(other)
+            lowspan = Span(self.low, other.low)
+            highspan = Span(self.high, other.high)
+            return {lowspan: 1, highspan: 1, intersect: 2}
+            
 class SpanList(Span):
     """"""
     def __init__(self, spans=None):
@@ -145,7 +155,7 @@ class SpanList(Span):
         # create blank outlist - maybe should be spanlist
         self.planar_spans = []
         # grab the first one to allow for iteration
-        spans = self.sort_high()
+        spans = self.sort_low()
         s0 = spans[0]
         # loop through each span
         for s in spans[1:]:
@@ -174,6 +184,29 @@ class SpanList(Span):
             self.gap_list.append(Span(prevhigh, curlow))
             # grab the high for the next time through the loop
             prevhigh = curhigh
+    
+    def loop_group(self):
+        spans = self.sort_low()
+        prev = spans[0]
+        outlist = [prev]
+        for s in spans[1:]:
+            if prev.disjoint(s):
+                yield outlist
+                outlist = [s]
+            else:
+                outlist.append(s)
+            prev = s
+        else:
+            yield outlist
+    
+    def frequencies(self):
+        """"""
+        self.frequency_list = []
+        spans = self.sort_low()
+        prevlow, prevhigh = spans[0]
+        for s in spans[1:]:
+            low, high = s.low, s.high
+            
         
 class Tree(object):
     """"""
