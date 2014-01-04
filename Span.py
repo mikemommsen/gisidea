@@ -181,12 +181,26 @@ class SpanList(Span):
     
     def planarize(self):
         self.planar_list = SpanList()
-        prev = None
         for s in self.loop_group():
             self.planar_list.append(Span(s.low, s.high))
     
     def frequency_planarize(self):
+        from collections import Counter
         self.frequency_planar_list = []
+        for sGroup in self.loop_group():
+            outlist = []
+            for s in sGroup:
+                low = s.low
+                high = s.high
+                outlist.append((('low',low),('high', high)))
+            outlist = Counter(outlist)
+            count = 0
+            for (key, val), c in sorted(outlist.iteritems(), key=lambda x: x[0][1]):
+                if key == 'low':
+                    count += c
+                else: 
+                    count -= c
+                    
     
     def find_gaps(self):
         self.gaps = []
