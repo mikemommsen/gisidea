@@ -194,12 +194,17 @@ class SpanList(Span):
                 high = s.high
                 outlist.append((('low',low),('high', high)))
             outlist = Counter(outlist)
-            count = 0
-            for (key, val), c in sorted(outlist.iteritems(), key=lambda x: x[0][1]):
+            
+            looplist = sorted(outlist.iteritems(), key=lambda x: x[0][1])
+            (key, prevval), count = looplist[0]
+            assert key == 'low', 'cant start with a high'
+            for (key, val), c in looplist[1:]:
                 if key == 'low':
                     count += c
                 else: 
                     count -= c
+                self.frequency_planar_list.append(Span(prevval, val))
+                prevval = val
                     
     
     def find_gaps(self):
