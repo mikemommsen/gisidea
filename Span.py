@@ -2,6 +2,7 @@
 from operator import attrgetter
 
 
+
 class Span(object):
     """basic exercise of a 1d span to work through basic concepts"""
     def __init__(self, low, high):
@@ -37,41 +38,43 @@ class Span(object):
             return False
             
     def split(self, invalue):
+        """if invalue is inside the span then returns span split at that point.
+        if it is outside then we clearly just return the span itself"""
         if self.pointinside(invalue):
             return Spanlist([Span(self.low, invalue), Span(invalue, self.high)])
         else:
             return self
     
     def disjoint(self, other):
-        """"""
+        """test to see if two spans are disjoint or not"""
         if self.low > other.high or self.high < other.low:
             return True
         else:
             return False
             
     def overlapping(self, other):
-        """"""
+        """returns true if one of the other endpoints is inside the span, but not both"""
         if bool(self.pointInside(other.low)) + bool(self.pointInside(other.high)) == 1:
             return True
         else:
             return False
             
     def nested(self, other):
-        """"""
+        """returns True if other.low and other.high are inside the span"""
         if self.low < other.low and self.high > other.high:
             return True
         else:
             return False
             
     def equal(self, other):
-        """"""
+        """returns true if the low and high points are the same"""
         if self.low == other.low and self.high == other.high:
             return True
         else:
             return False
     
     def touchesOutside(self, other):
-        """"""
+        """returns true if """
         if self.pointOnBoundary(other.low) and self.pointOutside(other.high):
             return True
         elif self.pointOnBoundary(other.high) and self.pointOutside(other.low):
@@ -139,7 +142,7 @@ class Span(object):
             highspan = Span(self.high, other.high)
             return {lowspan: 1, highspan: 1, intersect: 2}
             
-class SpanList(Span):
+class SpanList(object):
     """"""
     def __init__(self, spans=None):
         """"""
@@ -150,8 +153,8 @@ class SpanList(Span):
         else:
             low = None
             high = None
-        super(SpanList, self).__init__(low, high)
-        
+        self.boundingspan = Span(low, high)
+
     def __str__(self):
         """"""
         return 'SpanList object with spans: [{0}]'.format(','.join(str(s) for s in self.spans))
@@ -162,6 +165,19 @@ class SpanList(Span):
             self.low = inSpan.low
         if inSpan.high > self.high:
             self.high = inSpan.high
+            
+    def __add__(self, other):
+    def __iadd__(self, other):
+        
+    def __sub__(self, other):
+        
+    def __isub__(self, other):
+        
+    def remove(self, value):
+        
+    def 
+        
+    
     
     def loop_group(self):
         """function to loop through the groups that overlap each other.
@@ -180,11 +196,13 @@ class SpanList(Span):
             yield outlist
     
     def planarize(self):
+        """"""
         self.planar_list = SpanList()
         for s in self.loop_group():
             self.planar_list.append(Span(s.low, s.high))
     
     def frequency_planarize(self):
+        """"""
         from collections import Counter
         self.frequency_planar_list = []
         for sGroup in self.loop_group():
@@ -192,22 +210,22 @@ class SpanList(Span):
             for s in sGroup:
                 low = s.low
                 high = s.high
-                outlist.append((('low',low),('high', high)))
+                outlist.append((('low',low), ('high', high)))
             outlist = Counter(outlist)
-            
-            looplist = sorted(outlist.iteritems(), key=lambda x: x[0][1])
-            (key, prevval), count = looplist[0]
-            assert key == 'low', 'cant start with a high'
-            for (key, val), c in looplist[1:]:
-                if key == 'low':
-                    count += c
-                else: 
-                    count -= c
-                self.frequency_planar_list.append(Span(prevval, val))
+            looplist = Counter()
+            for k, v in outlist.iteritems():
+                if k[0] == 'high':
+                    v = -v
+                looplist[k[1]] += v
+            looplist = sorted(looplist.iteritems(), key=lambda x: x[0])
+            prevval, count = looplist[0]
+            for val, c in looplist[1:]:
+                count += c
+                self.frequency_planar_list.append(Span(prevval, val,))
                 prevval = val
-                    
     
     def find_gaps(self):
+        """"""
         self.gaps = []
         spans = self.loop_group()
         prevhigh = spans.next()
